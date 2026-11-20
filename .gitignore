@@ -1,0 +1,5 @@
+gbd/raw/
+out/
+*.csv
+*.xlsx
+__pycache__/

@@ -1,8 +1,10 @@
 """2026-11-19 third-party review: robustness of the female-minus-male HCV/HBV log-ratio slope contrast (abstract 0.42).
 (a) official GBD 2023 all-age ASRs: Newey-West lags 0-5, period 1990-2019, 1990-2021.
-(b) cross-round: GBD 2021 vs GBD 2023 ASRs for ages >=15 (GBD 2019 std pop renormalised), same procedure (consistency_2021_2023.py), 1990-2021."""
+(b) cross-round: GBD 2021 vs GBD 2023 ASRs for ages >=15 (GBD 2019 std pop, original weights, not renormalised), same procedure (consistency_2021_2023.py), 1990-2021."""
 import pandas as pd,numpy as np,statsmodels.api as sm,glob,runpy,io,contextlib
-B=''
+import os
+B=os.environ.get('GBD_ROOT','')  # package root; default = current directory (run from the package root)
+if B and not B.endswith('/'): B+='/'
 d=pd.read_csv(B+'out/main/master_dataset_long.csv')
 d=d[(d.location=='China')&(d.age=='Age-standardized')&(d.metric=='Rate')&(d.sex!='Both')]
 def ser(src,m,s,e): return src[(m,s,e)]
@@ -46,5 +48,5 @@ for lab,src in [('GBD 2021 ≥15',s21),('GBD 2023 ≥15',s23)]:
         for s in ['Female','Male']:
             r=src[(m,s,'HCV')]/src[(m,s,'HBV')]; rat.append((lab,m,s,round(r.loc[1990],3),round(r.loc[2021],3)))
 rat=pd.DataFrame(rat,columns=['source','measure','sex','HCV/HBV 1990','HCV/HBV 2021'])
-R.to_csv(B+'out/contrast/ratio_contrast_robustness.csv',index=False); W.to_csv(B+'out/contrast/ratio_within_sex_by_round.csv',index=False); rat.to_csv(B+'out/contrast/ratio_levels_by_round.csv',index=False)
+os.makedirs(B+'out/contrast',exist_ok=True); R.to_csv(B+'out/contrast/ratio_contrast_robustness.csv',index=False); W.to_csv(B+'out/contrast/ratio_within_sex_by_round.csv',index=False); rat.to_csv(B+'out/contrast/ratio_levels_by_round.csv',index=False)
 pd.set_option('display.width',250); print(R.to_string()); print(W.to_string()); print(rat.to_string())

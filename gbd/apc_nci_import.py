@@ -1,6 +1,6 @@
 # Import NCI APC Web Tool (analysistools.cancer.gov/apc, Default reference) workbooks -> in-house schema (TAG nci2023)
 import pandas as pd,shutil,os
-B=''; D='data/nci_apc_exports/'  # the 24 NCI APC Web Tool exports under their original names (see Table S2, Source column)
+B=''; D='data/nci_apc_exports/'  # the 24 NCI APC Web Tool exports under their original names (see Supplementary Table S3, Source column)
 MAP={'APC_Analysis_13_9_4-24a067e6':'Female_HBV_incidence','APC_Analysis_13_11_7-1e106dce':'Female_HCV_incidence','APC_Analysis_13_11_41-e6abd267':'Male_MASH_incidence','APC_Analysis_13_12_7-333aaf39':'Male_HBV_incidence',
 'APC_Analysis_13_28_0-bccd9ecc':'Female_Other_deaths','APC_Analysis_13_28_14-d8710f4d':'Female_Other_incidence','APC_Analysis_13_28_29-e0717946':'Male_Alcohol_deaths','APC_Analysis_13_28_45-0236aa9d':'Male_Alcohol_incidence',
 'APC_Analysis_13_28_1-8210dda2':'Female_HBV_deaths','APC_Analysis_13_28_19-69d6e29e':'Female_HCV_deaths','APC_Analysis_13_28_34-a6b01a08':'Female_MASH_deaths','APC_Analysis_13_28_50-18e9bd6d':'Female_MASH_incidence',

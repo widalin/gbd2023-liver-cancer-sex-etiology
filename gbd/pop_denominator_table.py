@@ -1,4 +1,4 @@
-# Supplementary Table S4 part B: deviations of derived GBD 2023 population from GBD 2021 official and UN WPP 2024; outputs out/audit/pop_denominator_table.csv
+# Supplementary Table S6 part B (working numbering: S4 part B): deviations of derived GBD 2023 population from GBD 2021 official and UN WPP 2024; outputs out/audit/pop_denominator_table.csv
 import pandas as pd, numpy as np
 B=''  # run from the package root
 d=pd.read_csv(B+'gbd/raw/gbd2023_china_pop/pop_derived_allcause.csv')[['sex_name','age_name','year','val']]

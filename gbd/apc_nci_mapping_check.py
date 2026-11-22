@@ -3,7 +3,7 @@ cross-sectional age curve (reference period 2004-08) and fitted temporal trend (
 Poisson APC fitted rates (identifiable) of all 24 input files (out/apc_benchmark/all24). A workbook is confirmed if its mapped series is the
 best match by log-RMSE and clearly separated from the runner-up."""
 import pandas as pd, numpy as np, glob, os, re
-B=''; D='data/nci_apc_exports/'  # the 24 NCI APC Web Tool exports under their original names (see Table S2, Source column)
+B=''; D='data/nci_apc_exports/'  # the 24 NCI APC Web Tool exports under their original names (see Supplementary Table S3, Source column)
 exec(re.search(r"MAP=\{.*?\}\n", open(B+'gbd/apc_nci_import.py').read(), re.S).group(0))
 import statsmodels.api as sm
 def fitted(Y,N):

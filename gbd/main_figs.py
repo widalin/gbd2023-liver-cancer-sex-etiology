@@ -8,7 +8,7 @@ from scipy import stats
 
 BASE = ""
 OUT = BASE + "out/main/"; os.makedirs(OUT, exist_ok=True)
-a = pd.read_csv(BASE + "gbd/IHME-GBD_2023_DATA-4f95895a-1.csv")
+a = pd.read_csv(BASE + "gbd/GBD2023_liver_cancer_etiology_Global_China_1990-2023.csv")
 b = pd.read_csv(BASE + "gbd/raw/jkus_deaths_dalys_F_both/IHME-GBD_2023_DATA-6c99c8d9-1.csv")
 import glob as _gl
 _co = [pd.read_csv(_gl.glob(BASE + f"gbd/raw/{_k}/*.csv")[0]) for _k in

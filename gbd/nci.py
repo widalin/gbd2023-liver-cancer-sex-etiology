@@ -1,7 +1,7 @@
 """Load official NCI Joinpoint 6.1.0 results (198 series, run 2026-11-08 by secretary).
 Mapping id->series in id_map.json was independently verified by SE fingerprint (0 mismatches)."""
 import json, numpy as np, pandas as pd
-B = "out/nci_joinpoint/rerun_output/02_原始导出/"
+B = "out/nci_joinpoint/rerun_output/02_raw_exports/"
 _m = {int(k): v for k, v in json.load(open(B + "id_map.json")).items()}
 def _rd(f):
     d = pd.read_csv(B + f, sep="\t"); d["name"] = d.series.map(_m); return d
@@ -10,7 +10,7 @@ AAPC = _rd("all.Export.AAPC.txt"); APC = _rd("all.Export.APC.txt"); EST = _rd("a
 B2 = "out/nci_joinpoint/rerun2_output/"
 def _rd2(kind):
     out = []
-    for sub, stem in [("01_男性死亡_18条/", "jkus_male_deaths"), ("02_其余_54条/", "jkus_rest_v2")]:
+    for sub, stem in [("01_male_deaths_18_series/", "jkus_male_deaths"), ("02_other_54_series/", "jkus_rest_v2")]:
         d = pd.read_csv(B2 + sub + f"{stem}.Export.{kind}.txt", sep="\t")
         d["name"] = d.location + "_" + d.measure + "_" + d.sex + "_" + d.etiology; d["batch"] = 2; out.append(d)
     d = pd.concat(out, ignore_index=True)

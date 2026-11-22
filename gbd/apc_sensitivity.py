@@ -40,14 +40,22 @@ with pd.ExcelWriter(B+'out/robust/apc_sensitivity.xlsx') as x:
     REC.reset_index().to_excel(x,sheet_name='Reconcile_EAPC',index=False)
 pd.set_option('display.width',300); pd.set_option('display.max_columns',20); pd.set_option('display.max_colwidth',24)
 print(T.to_string()); print(REC.to_string())
-# figure: cohort RR, incidence, male MASH / female HCV / female HBV / male HBV
-fig,ax=plt.subplots(1,4,figsize=(17,4.2),sharey=False)
-col=dict(zip(V,['#222','#C2703D','#E0A458','#4BA3D9','#7FA67A']))
+# figure (Supplementary Figure S2): cohort RR, incidence; every curve re-referenced to the 1953.5 birth cohort
+# (divided by its own RR at 1953.5; log-linear interpolation between 1950.5 and 1955.5 for periods 1991-2020, whose grid is offset by 3 years)
+def _reref(d,ref=1953.5):
+    d=d.sort_values('x'); x=d.x.values.astype(float); y=np.log(d.est.values.astype(float))
+    r=y[x==ref][0] if (x==ref).any() else np.interp(ref,x,y)
+    return x,np.exp(y-r)
+fig,ax=plt.subplots(2,2,figsize=(10.5,7.6),sharey=False); ax=ax.ravel()
+col=dict(zip(V,['#222','#C2703D','#E0A458','#4BA3D9','#7FA67A'])); RR=[]
 for i,(sx,e) in enumerate([('Male','MASH'),('Male','Alcohol'),('Female','HCV'),('Female','HBV')]):
     for k in V:
         d=F[(F.variant==k)&(F.measure=='Incidence')&(F.sex==sx)&(F.etiology==e)]
-        ax[i].plot(d.x,d.est,color=col[k],lw=2 if k.startswith('Main') else 1.2,label=k)
-    ax[i].axhline(1,color='r',lw=.7); ax[i].set_yscale('log'); ax[i].set_title(f'{"ABCD"[i]}  {sx} {e}: cohort RR (incidence)'); ax[i].set_xlabel('Birth cohort')
+        x_,y_=_reref(d); RR+=[dict(sex=sx,etiology=e,variant=k,cohort=a,RR_ref1953_5=round(b,4)) for a,b in zip(x_,y_)]
+        ax[i].plot(x_,y_,color=col[k],lw=2 if k.startswith('Main') else 1.2,label=k.replace('-','\u2013'))
+    ax[i].axhline(1,color='#1d1d1f55',lw=.8,ls=':'); ax[i].set_yscale('log'); ax[i].set_xlabel('Birth cohort')
+    ax[i].set_title(f'{"ABCD"[i]}  {"Men" if sx=="Male" else "Women"}, {e}: cohort RR (incidence)',loc='left')
     ax[i].set_yticks([0.1,0.2,0.5,1,2,5]); ax[i].set_yticklabels(['0.1','0.2','0.5','1','2','5']); ax[i].minorticks_off()
 ax[0].legend(frameon=False,fontsize=7.5,loc='lower left')
-plt.tight_layout(); plt.savefig(B+'out/robust/FigS8_APC_sensitivity_cohort.png',dpi=300)
+plt.tight_layout(); plt.savefig(B+'out/robust/FigS2_APC_sensitivity_cohort.png',dpi=600)
+pd.DataFrame(RR).to_csv(B+'out/robust/apc_sensitivity_cohortRR_ref1953.5.csv',index=False)
